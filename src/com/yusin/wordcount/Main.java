@@ -12,12 +12,13 @@ public class Main {
 		*/ 
 		
 		//파일 생성
-		File file = new File("E:\\JavaIO","test-utf8.txt");
+		File srcFile = new File("E:\\JavaIO","test-utf8.txt");
+		File tarFile = new File("E:\\JavaIO", "test-utf8-result.txt");
 		
 		//텍스트 파일을 낱 단어로 전환해 주는 생성기를 생성
 		SingleWordGenerator swg = new SingleWordGenerator();
 		
 		//전환해야 하는 파일을 fileToSingleWord함수 안에 입력함
-		swg.fileToSingleWord(file);
+		swg.fileToSingleWord(srcFile, tarFile);
 	}
 }
