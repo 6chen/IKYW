@@ -7,10 +7,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SingleWordGenerator {
+	
+	//정규식에 적용할 패턴을 정의함
+	private String PATTERN = "([a-z]|[A-Z]|\')+";
+	
 	public void fileToSingleWord(File srcFile, File tarFile) throws IOException {
 		// 파일을 읽기 위한 BufferedReader를 생성
 		BufferedReader bufReader = new BufferedReader(new FileReader(srcFile));
@@ -29,15 +35,20 @@ public class SingleWordGenerator {
 
 		while ((line = bufReader.readLine()) != null) {
 			if (!line.equals("")) { // 텍스트 파일 안에 빈 줄을 지움
-				//line안에 있는 문자열을 빈칸 기준으로 자름
-				String[] words = line.split(" ");
-				for (String word : words) {
+				
+				//패턴을 정의하여 line에거 적용시킴
+				Pattern pattern = Pattern.compile(PATTERN);
+				Matcher matcher = pattern.matcher(line);
+				
+				while(matcher.find()){//만약에 정의한 패턴에 어울리는 것 있으면 낱 단어를 읽음
+					//읽어온 단어를 전체 소문자로 전환함
+					String wordMatched = matcher.group().toLowerCase();
 					//자른 결과인 낱 단어가 Map 안에 존재한지 판단하여 존재하면 value를 증가시킴, 존재하지 않으면 새로운 Entry를 추가함.
-					boolean exists = cntMap.containsKey(word);
+					boolean exists = cntMap.containsKey(wordMatched);
 					if (exists) {
-						cntMap.replace(word, cntMap.get(word) + 1);
+						cntMap.replace(wordMatched, cntMap.get(wordMatched) + 1);
 					} else {
-						cntMap.put(word, 1);
+						cntMap.put(wordMatched, 1);
 					}
 				}
 			}
